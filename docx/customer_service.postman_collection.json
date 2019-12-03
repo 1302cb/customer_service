@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "5c71ecf9-7d68-42db-9014-e9b0b2814d64",
+		"name": "customer_service",
+		"description": "客服系统接口",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getRecommend",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/answer/getRecommend?question=星星&uid=00000000000000000000000000000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"answer",
+						"getRecommend"
+					],
+					"query": [
+						{
+							"key": "question",
+							"value": "星星"
+						},
+						{
+							"key": "uid",
+							"value": "00000000000000000000000000000000"
+						}
+					]
+				},
+				"description": "获取推荐"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/log/insertOne?uid=4671aa2c82d44c0087f491f5e8d750ee&questionUid=823bcd9ab3ef4ac9965dabeceab5701c",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/log/insertOne?uid=4671aa2c82d44c0087f491f5e8d750ee&questionUid=823bcd9ab3ef4ac9965dabeceab5701c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"log",
+						"insertOne"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "4671aa2c82d44c0087f491f5e8d750ee"
+						},
+						{
+							"key": "questionUid",
+							"value": "823bcd9ab3ef4ac9965dabeceab5701c"
+						}
+					]
+				},
+				"description": "对用户的点击行为进行统计存储"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
