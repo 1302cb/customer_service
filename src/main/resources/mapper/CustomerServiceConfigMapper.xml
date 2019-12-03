@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cvte.customer_service.cuse.dao.CustomerServiceConfigMapper">
+    <resultMap id="BaseResultMap" type="com.cvte.customer_service.cuse.entity.CustomerServiceConfig">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="uid" jdbcType="CHAR" property="uid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_delete" jdbcType="BIT" property="isDelete"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="config_type" jdbcType="BIT" property="configType"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.cvte.customer_service.cuse.entity.CustomerServiceConfig">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, uid, create_time, update_time, is_delete, description, config_type
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+
+    <insert id="insertSelective" parameterType="com.cvte.customer_service.cuse.entity.CustomerServiceConfig">
+        insert into customer_service_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="configType != null">
+                config_type,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="uid != null">
+                #{uid,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="configType != null">
+                #{configType,jdbcType=BIT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByUniqueKeySelective" parameterType="com.cvte.customer_service.cuse.entity.CustomerServiceConfig">
+        update customer_service_config
+        <set>
+            <if test="uid != null">
+                uid = #{uid,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where config_type = #{configType}
+    </update>
+    <select id="selectContentByConfigType" resultType="java.lang.String">
+    select content from customer_service_config where config_type=#{configType} and is_delete=0;
+  </select>
+</mapper>

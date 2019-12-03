@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cvte.customer_service.cuse.dao.CustomerServiceAnswerMapper">
+    <resultMap id="BaseResultMap" type="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="uid" jdbcType="CHAR" property="uid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_delete" jdbcType="BIT" property="isDelete"/>
+        <result column="question" jdbcType="VARCHAR" property="question"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        <result column="answer" jdbcType="LONGVARCHAR" property="answer"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, uid, create_time, update_time, is_delete, question
+  </sql>
+    <sql id="Blob_Column_List">
+    answer
+  </sql>
+
+    <select id="selectRecommendByQuestion" resultType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        select id,uid,question,answer from customer_service_answer where match(question) against(#{str} in boolean mode);
+    </select>
+    <select id="selectAllAnswer" resultType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        select * from customer_service_answer csa;
+    </select>
+    <select id="selectOneQuestionByUid"
+            resultType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        SELECT * from customer_service_answer csa WHERE uid=#{questionUid};
+    </select>
+    <insert id="insertSelective" parameterType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        insert into customer_service_answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="question != null">
+                question,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="uid != null">
+                #{uid,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="question != null">
+                #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
+        update customer_service_answer
+        <set>
+            <if test="uid != null">
+                uid = #{uid,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="question != null">
+                question = #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                answer = #{answer,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
