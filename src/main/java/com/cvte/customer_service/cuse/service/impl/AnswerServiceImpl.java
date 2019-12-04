@@ -71,15 +71,14 @@ public class AnswerServiceImpl implements AnswerService {
         List<CustomerServiceAnswer> answers = customerServiceAnswerMapper.selectRecommendByQuestion(param);
         //转化成dto
         List<CustomerServiceAnswerDTO> res = EntityConversionDTOUtil.conversionToAnswerDTOList(answers);
-        return processRecommendList(res);
+        return processRecommendList(res,maxLen);
     }
 
 
     /*
      增减从数据库中查询得到的数据项
      */
-    private List<CustomerServiceAnswerDTO> processRecommendList(List<CustomerServiceAnswerDTO> list) {
-        int maxLen = configService.getMaxLenConfig();
+    private List<CustomerServiceAnswerDTO> processRecommendList(List<CustomerServiceAnswerDTO> list,int maxLen) {
         CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
         int len = list.size();
         logger.info("recommend len from mysql:" + len);
@@ -88,6 +87,7 @@ public class AnswerServiceImpl implements AnswerService {
         } else if (len < maxLen) {
             //小于则用热门问题补上
             list.addAll(getHotRecommend(maxLen - len));
+            list.remove(list.size()-1);
         } else {
             //大于则截取一部分
             list = list.subList(0, maxLen);
@@ -100,10 +100,9 @@ public class AnswerServiceImpl implements AnswerService {
     /*
      从redis中得到最热门到几个问题,问题到长度通过配置表得到，如果配置表没有配置，默认是4个
      */
-    private List<CustomerServiceAnswerDTO> getHotRecommend(int len) {
-        long maxLen = configService.getMaxLenConfig() - len;
+    private List<CustomerServiceAnswerDTO> getHotRecommend(int maxLen) {
         CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
-        Set<Object> set = redisTemplate.opsForZSet().reverseRange(QUESTION_RANK, 0L, maxLen);
+        Set<Object> set = redisTemplate.opsForZSet().reverseRange(QUESTION_RANK, 0L, maxLen-1);
         List<CustomerServiceAnswerDTO> res = new ArrayList<>();
         assert set != null;
         for (Object object : set) {

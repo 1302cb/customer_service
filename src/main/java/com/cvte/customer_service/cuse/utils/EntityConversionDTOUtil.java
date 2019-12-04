@@ -11,6 +11,10 @@ public class EntityConversionDTOUtil {
     答案entity类转化成dto
      */
     public static CustomerServiceAnswerDTO conversionToAnswerDTO(CustomerServiceAnswer answer) {
+        //判空
+        if(answer==null){
+            return null;
+        }
         CustomerServiceAnswerDTO res = new CustomerServiceAnswerDTO();
         res.setUid(answer.getUid());
         res.setAnswer(answer.getAnswer());
