@@ -2,9 +2,11 @@ package com.cvte.customer_service.cuse.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cvte.customer_service.cuse.dao.CustomerServiceAnswerMapper;
+import com.cvte.customer_service.cuse.dto.CustomerServiceAnswerDTO;
 import com.cvte.customer_service.cuse.entity.CustomerServiceAnswer;
 import com.cvte.customer_service.cuse.service.AnswerService;
 import com.cvte.customer_service.cuse.service.ConfigService;
+import com.cvte.customer_service.cuse.utils.EntityConversionDTOUtil;
 import com.cvte.customer_service.cuse.utils.JcsegUtil;
 import org.lionsoul.jcseg.tokenizer.core.JcsegException;
 import org.slf4j.Logger;
@@ -12,19 +14,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 /**
-*
-*@author chenbo
-*@Date 2019/12/3 4:53 下午
-*/
+ * @author chenbo
+ * @Date 2019/12/3 4:53 下午
+ */
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
     private static Logger logger = LoggerFactory.getLogger(AnswerServiceImpl.class);
+
+    //存储到redis的zset名称
     public final static String QUESTION_RANK = "questionRank";
 
     @Autowired
@@ -43,7 +48,7 @@ public class AnswerServiceImpl implements AnswerService {
      * @return
      */
     @Override
-    public List<CustomerServiceAnswer> getRecommendListByQuestion(String str) {
+    public List<CustomerServiceAnswerDTO> getRecommendListByQuestion(String str) {
         logger.info("question-->" + str);
         List<String> values = new ArrayList<>();
         int maxLen = configService.getMaxLenConfig();
@@ -63,7 +68,9 @@ public class AnswerServiceImpl implements AnswerService {
             return getHotRecommend(maxLen);
         }
         //全文索引查找匹配项
-        List<CustomerServiceAnswer> res = customerServiceAnswerMapper.selectRecommendByQuestion(param);
+        List<CustomerServiceAnswer> answers = customerServiceAnswerMapper.selectRecommendByQuestion(param);
+        //转化成dto
+        List<CustomerServiceAnswerDTO> res = EntityConversionDTOUtil.conversionToAnswerDTOList(answers);
         return processRecommendList(res);
     }
 
@@ -71,38 +78,43 @@ public class AnswerServiceImpl implements AnswerService {
     /*
      增减从数据库中查询得到的数据项
      */
-    private List<CustomerServiceAnswer> processRecommendList(List<CustomerServiceAnswer> list) {
+    private List<CustomerServiceAnswerDTO> processRecommendList(List<CustomerServiceAnswerDTO> list) {
         int maxLen = configService.getMaxLenConfig();
+        CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
         int len = list.size();
         logger.info("recommend len from mysql:" + len);
         if (len == maxLen) {
-            return list;
+            logger.info("长度刚好");
         } else if (len < maxLen) {
             //小于则用热门问题补上
             list.addAll(getHotRecommend(maxLen - len));
-            return list;
         } else {
             //大于则截取一部分
             list = list.subList(0, maxLen);
-            return list;
         }
+        //添加默认选项
+        list.add(defaultLine);
+        return list;
     }
 
     /*
      从redis中得到最热门到几个问题,问题到长度通过配置表得到，如果配置表没有配置，默认是4个
      */
-    private List<CustomerServiceAnswer> getHotRecommend(int len) {
+    private List<CustomerServiceAnswerDTO> getHotRecommend(int len) {
         long maxLen = configService.getMaxLenConfig() - len;
+        CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
         Set<Object> set = redisTemplate.opsForZSet().reverseRange(QUESTION_RANK, 0L, maxLen);
-        List<CustomerServiceAnswer> res = new ArrayList<>();
+        List<CustomerServiceAnswerDTO> res = new ArrayList<>();
         assert set != null;
         for (Object object : set) {
             String str = (String) object;
-            logger.info("answer from redis object:"+str);
+            logger.info("answer from redis object:" + str);
             CustomerServiceAnswer answer = JSONObject.parseObject(str, CustomerServiceAnswer.class);
             logger.info("answer from redis object:" + answer);
-            res.add(answer);
+            res.add(EntityConversionDTOUtil.conversionToAnswerDTO(answer));
         }
+        //默认行加进去
+        res.add(defaultLine);
         return res;
     }
 
@@ -114,9 +126,13 @@ public class AnswerServiceImpl implements AnswerService {
         return customerServiceAnswerMapper.insertSelective(answer);
     }
 
+    /*
+    根据uid来进行查找一条数据
+     */
     @Override
-    public CustomerServiceAnswer selectOneQuestionByUid(String questionUid) {
-        return customerServiceAnswerMapper.selectOneQuestionByUid(questionUid);
+    public CustomerServiceAnswerDTO selectOneQuestionByUid(String questionUid) {
+        CustomerServiceAnswer answer = customerServiceAnswerMapper.selectOneQuestionByUid(questionUid);
+        return EntityConversionDTOUtil.conversionToAnswerDTO(answer);
     }
 
 }

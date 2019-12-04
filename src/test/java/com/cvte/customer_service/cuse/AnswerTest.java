@@ -5,6 +5,8 @@ import com.cvte.customer_service.cuse.entity.CustomerServiceAnswer;
 import com.cvte.customer_service.cuse.utils.UUIDUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,14 +17,16 @@ public class AnswerTest {
     @Autowired
     private CustomerServiceAnswerMapper customerServiceAnswerMapper;
 
+    private static Logger logger = LoggerFactory.getLogger(AnswerTest.class);
+
     @Test
-    public void testInsertIntoAnswer(){
+    public void testInsertIntoAnswer() {
         CustomerServiceAnswer answer = new CustomerServiceAnswer();
-        answer.setQuestion("如何创建多种分组方案？");
-        answer.setAnswer("请在班级成员列表页面，点击小组标签进入小组列表页面\n" +
-                "点击分组下拉列表，选择添加分组方案\n" +
-                "输入分组方案名称，对学生进行新的分组");
-        answer.setUid(UUIDUtils.getUUID());
+        answer.setQuestion("以上都不是");
+        answer.setAnswer("以上都不是");
+        String uuid = UUIDUtils.getUUID();
+        logger.info("uuid->" + uuid);
+        answer.setUid(uuid);
         customerServiceAnswerMapper.insertSelective(answer);
     }
 }
