@@ -9,7 +9,7 @@
 		{
 			"name": "getRecommend",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/answer/getRecommend?question=星星&uid=00000000000000000000000000000000",

@@ -32,7 +32,7 @@ public class ProcessTimeAspect {
         try {
             Object result = joinPoint.proceed();
             long end = System.currentTimeMillis();
-            logger.error("" + joinPoint + "\t消耗 : " + (end - start) + " ms!");
+            logger.info("" + joinPoint + "\t消耗 : " + (end - start) + " ms!");
             return result;
 
         } catch (Throwable e) {
