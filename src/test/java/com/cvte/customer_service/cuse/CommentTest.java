@@ -24,15 +24,16 @@ import java.util.List;
 public class CommentTest {
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private CustomerServiceAnswerMapper customerServiceAnswerMapper;
 
     private static Logger logger = LoggerFactory.getLogger(CommentTest.class);
     private static String rank = "questionRank";
+
     @Test
-    public void testGenerateTemplateCode(){
+    public void testGenerateTemplateCode() {
 
         try {
             MybatisReverseProjectUtil.generateTemplateCode();
@@ -50,15 +51,15 @@ public class CommentTest {
     }
 
     @Test
-    public void testpipeLined(){
+    public void testpipeLined() {
         List<CustomerServiceAnswer> list = customerServiceAnswerMapper.selectAllAnswer();
         int len = list.size();
-        for(CustomerServiceAnswer answer:list){
-            logger.info("answer->"+answer);
+        for (CustomerServiceAnswer answer : list) {
+            logger.info("answer->" + answer);
         }
         redisTemplate.executePipelined((RedisCallback<Object>) redisConnection -> {
-            for(int i=0;i<len;i++){
-                redisTemplate.opsForZSet().add(rank, JSONObject.toJSONString(list.get(i)),(double)1);
+            for (int i = 0; i < len; i++) {
+                redisTemplate.opsForZSet().add(rank, JSONObject.toJSONString(list.get(i)), (double) 1);
             }
             return null;
         });

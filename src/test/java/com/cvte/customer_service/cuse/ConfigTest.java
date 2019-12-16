@@ -50,11 +50,11 @@ public class ConfigTest {
     @Test
     public void testSelectContentByContentType() {
         String content = config.selectContentByConfigType(2);
-        CustomerServiceConfigDTO contentDTO = JSONObject.parseObject(content,CustomerServiceConfigDTO.class);
+        CustomerServiceConfigDTO contentDTO = JSONObject.parseObject(content, CustomerServiceConfigDTO.class);
         logger.info("type-->" + config.selectContentByConfigType(2));
-        logger.info("contentDTO->"+contentDTO);
-        CustomerServiceAnswer answer = JSONObject.parseObject(contentDTO.getConfigValue().get(0),CustomerServiceAnswer.class);
-        logger.info("answer->"+answer);
+        logger.info("contentDTO->" + contentDTO);
+        CustomerServiceAnswer answer = JSONObject.parseObject(contentDTO.getConfigValue().get(0), CustomerServiceAnswer.class);
+        logger.info("answer->" + answer);
     }
 
     @Test

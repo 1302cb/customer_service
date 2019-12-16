@@ -11,12 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
+
 /**
-*答案的控制器类
-*@author chenbo
-*@Date 2019/12/4 2:16 下午
-*/
+ * 答案的控制器类
+ *
+ * @author chenbo
+ * @Date 2019/12/4 2:16 下午
+ */
 @RestController
 public class AnswerController {
     private Logger logger = LoggerFactory.getLogger(AnswerController.class);

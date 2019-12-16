@@ -14,14 +14,15 @@
         <result column="answer" jdbcType="LONGVARCHAR" property="answer"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, uid, create_time, update_time, is_delete, question
-  </sql>
+        id, uid, create_time, update_time, is_delete, question
+    </sql>
     <sql id="Blob_Column_List">
-    answer
-  </sql>
+        answer
+    </sql>
 
     <select id="selectRecommendByQuestion" resultType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
-        select id,uid,question,answer from customer_service_answer where match(question) against(#{str} in boolean mode);
+        select id,uid,question,answer from customer_service_answer where match(question) against(#{str} in boolean
+        mode);
     </select>
     <select id="selectAllAnswer" resultType="com.cvte.customer_service.cuse.entity.CustomerServiceAnswer">
         select * from customer_service_answer csa;

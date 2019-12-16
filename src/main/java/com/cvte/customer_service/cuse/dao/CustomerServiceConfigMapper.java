@@ -2,11 +2,13 @@ package com.cvte.customer_service.cuse.dao;
 
 import com.cvte.customer_service.cuse.entity.CustomerServiceConfig;
 import org.springframework.stereotype.Repository;
+
 /**
-*配置类的持久层
-*@author chenbo
-*@Date 2019/12/3 4:50 下午
-*/
+ * 配置类的持久层
+ *
+ * @author chenbo
+ * @Date 2019/12/3 4:50 下午
+ */
 @Repository
 public interface CustomerServiceConfigMapper {
     /*

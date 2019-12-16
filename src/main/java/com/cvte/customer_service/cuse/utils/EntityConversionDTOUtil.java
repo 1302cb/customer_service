@@ -12,7 +12,7 @@ public class EntityConversionDTOUtil {
      */
     public static CustomerServiceAnswerDTO conversionToAnswerDTO(CustomerServiceAnswer answer) {
         //判空
-        if(answer==null){
+        if (answer == null) {
             return null;
         }
         CustomerServiceAnswerDTO res = new CustomerServiceAnswerDTO();

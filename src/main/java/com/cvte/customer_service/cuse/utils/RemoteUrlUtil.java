@@ -1,11 +1,13 @@
 package com.cvte.customer_service.cuse.utils;
 
 import javax.servlet.http.HttpServletRequest;
+
 /**
-*获取远端请求的ip地址
-*@author chenbo
-*@Date 2019/12/3 4:53 下午
-*/
+ * 获取远端请求的ip地址
+ *
+ * @author chenbo
+ * @Date 2019/12/3 4:53 下午
+ */
 public class RemoteUrlUtil {
 
     /**

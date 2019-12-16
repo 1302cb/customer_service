@@ -71,14 +71,48 @@ public class AnswerServiceImpl implements AnswerService {
         List<CustomerServiceAnswer> answers = customerServiceAnswerMapper.selectRecommendByQuestion(param);
         //转化成dto
         List<CustomerServiceAnswerDTO> res = EntityConversionDTOUtil.conversionToAnswerDTOList(answers);
-        return processRecommendList(res,maxLen);
+        return processRecommendList(res, maxLen);
     }
 
+    /**
+     * 全文索引查找匹配项
+     *
+     * @param msg
+     * @return
+     */
+    public List<String> getCommendFromDatabase(String msg) {
+        List<String> values = new ArrayList<>();
+        List<String> resultCommends = new ArrayList<>();
+
+        //对输入提取关键词
+        try {
+            values = JcsegUtil.segment(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JcsegException e) {
+            e.printStackTrace();
+        }
+        //对提取对关键词进行拼接
+        String param = JcsegUtil.spliceJcsegArray(values);
+        logger.info("param-->" + param);
+        //关键词并没有命中，就返回热门推荐
+        if (param == null) {
+            return null;
+        }
+        //全文索引查找匹配项
+        List<CustomerServiceAnswer> answers = customerServiceAnswerMapper.selectRecommendByQuestion(param);
+        //转化成dto
+        List<CustomerServiceAnswerDTO> res = EntityConversionDTOUtil.conversionToAnswerDTOList(answers);
+        for (CustomerServiceAnswerDTO dto : res) {
+            resultCommends.add(dto.getQuestion());
+        }
+        return resultCommends;
+    }
 
     /*
      增减从数据库中查询得到的数据项
      */
-    private List<CustomerServiceAnswerDTO> processRecommendList(List<CustomerServiceAnswerDTO> list,int maxLen) {
+    private List<CustomerServiceAnswerDTO> processRecommendList(List<CustomerServiceAnswerDTO> list, int maxLen) {
         CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
         int len = list.size();
         logger.info("recommend len from mysql:" + len);
@@ -87,7 +121,7 @@ public class AnswerServiceImpl implements AnswerService {
         } else if (len < maxLen) {
             //小于则用热门问题补上
             list.addAll(getHotRecommend(maxLen - len));
-            list.remove(list.size()-1);
+            list.remove(list.size() - 1);
         } else {
             //大于则截取一部分
             list = list.subList(0, maxLen);
@@ -102,7 +136,7 @@ public class AnswerServiceImpl implements AnswerService {
      */
     private List<CustomerServiceAnswerDTO> getHotRecommend(int maxLen) {
         CustomerServiceAnswerDTO defaultLine = configService.getDefaultFaultToleranceOption();
-        Set<Object> set = redisTemplate.opsForZSet().reverseRange(QUESTION_RANK, 0L, maxLen-1);
+        Set<Object> set = redisTemplate.opsForZSet().reverseRange(QUESTION_RANK, 0L, maxLen - 1);
         List<CustomerServiceAnswerDTO> res = new ArrayList<>();
         assert set != null;
         for (Object object : set) {

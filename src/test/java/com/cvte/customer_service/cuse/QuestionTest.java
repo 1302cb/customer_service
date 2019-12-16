@@ -15,7 +15,7 @@ public class QuestionTest {
     private CustomerServiceQuestionMapper customerServiceQuestionMapper;
 
     @Test
-    public void test(){
+    public void test() {
 
     }
 }

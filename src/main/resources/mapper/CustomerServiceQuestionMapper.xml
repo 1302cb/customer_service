@@ -11,8 +11,8 @@
         <result column="question_content" jdbcType="VARCHAR" property="questionContent"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, uid, create_time, update_time, is_delete, user_uid, question_content
-  </sql>
+        id, uid, create_time, update_time, is_delete, user_uid, question_content
+    </sql>
     <select id="selectByUniqueKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

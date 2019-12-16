@@ -4,11 +4,13 @@ import com.cvte.customer_service.cuse.entity.CustomerServiceAnswer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 /**
-*知识库的持久层
-*@author chenbo
-*@Date 2019/12/3 4:50 下午
-*/
+ * 知识库的持久层
+ *
+ * @author chenbo
+ * @Date 2019/12/3 4:50 下午
+ */
 @Repository
 public interface CustomerServiceAnswerMapper {
     /*

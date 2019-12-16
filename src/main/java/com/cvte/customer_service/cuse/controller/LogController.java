@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 /**
-*流水的控制器类
-*@author chenbo
-*@Date 2019/12/4 2:15 下午
-*/
+ * 流水的控制器类
+ *
+ * @author chenbo
+ * @Date 2019/12/4 2:15 下午
+ */
 @RestController
 public class LogController {
 

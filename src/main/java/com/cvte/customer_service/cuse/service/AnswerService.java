@@ -31,4 +31,13 @@ public interface AnswerService {
 
 
     CustomerServiceAnswerDTO selectOneQuestionByUid(String questionUid);
+
+
+    /**
+     * 全文索引查找匹配项
+     *
+     * @param msg
+     * @return
+     */
+    public List<String> getCommendFromDatabase(String msg);
 }

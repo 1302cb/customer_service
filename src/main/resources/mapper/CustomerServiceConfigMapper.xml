@@ -15,11 +15,11 @@
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, uid, create_time, update_time, is_delete, description, config_type
-  </sql>
+        id, uid, create_time, update_time, is_delete, description, config_type
+    </sql>
     <sql id="Blob_Column_List">
-    content
-  </sql>
+        content
+    </sql>
 
     <insert id="insertSelective" parameterType="com.cvte.customer_service.cuse.entity.CustomerServiceConfig">
         insert into customer_service_config
@@ -101,6 +101,6 @@
         where config_type = #{configType}
     </update>
     <select id="selectContentByConfigType" resultType="java.lang.String">
-    select content from customer_service_config where config_type=#{configType} and is_delete=0;
-  </select>
+        select content from customer_service_config where config_type=#{configType} and is_delete=0;
+    </select>
 </mapper>
